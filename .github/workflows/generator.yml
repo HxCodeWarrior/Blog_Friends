@@ -21,15 +21,15 @@ jobs:
     - name: Update links #更新
       run: |
         python generator/main.py
-    # - name: Commit & Push
-    #   uses: action-x/commit@v2.9
-    #   with:
-    #     github-token: ${{ secrets.PAT }}
-    #     push-branch: 'output'
-    #     force-push: 'true'
-    #     commit-message: 'Generate Json'
-    #     name: ${{ secrets.GITHUBUSERNAME }}
-    #     email: ${{ secrets.GITHUBEMAIL }}
+    - name: Commit & Push
+      uses: action-x/commit@v2.9
+      with:
+        github-token: ${{ secrets.PAT }}
+        push-branch: 'output'
+        force-push: 'true'
+        commit-message: 'Generate Json'
+        name: ${{ secrets.GITHUBUSERNAME }}
+        email: ${{ secrets.GITHUBEMAIL }}
     - name: Checkout CDN repository
       run: |
           git clone https://${{ secrets.GITHUBUSERNAME }}:${{ secrets.PAT }}@github.com/${{ secrets.GITHUBUSERNAME }}/CDN.git
