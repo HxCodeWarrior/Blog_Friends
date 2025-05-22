@@ -24,7 +24,7 @@ body:
               友链地址：https://blog.devnest.top/links/
               订阅地址：https://blog.devnest.top/feed.xml
          ```
-         ![友链填写示例](https://github.com/HxCodeWarrior/Blog_Friends/blob/master/.github/ISSUE_TEMPLATE/1.webp)
+         ![友链填写示例](https://raw.githubusercontent.com/HxCodeWarrior/Blog_Friends/refs/heads/master/.github/ISSUE_TEMPLATE/1.webp)
   - type: checkboxes
     id: checks
     attributes:
@@ -39,7 +39,7 @@ body:
           label: 建站需半年或有十篇原创文章以上，仅限博客，类型不限，内容积极向上，保持更新。
         - required: true
           label: 无违反国家相关法律法规和道德底线的内容，不涉反动言论和政治敏感话题，不传播色情淫秽，邪教组织等内容。
-        - required: true
+        - required: false
           label: 申请前请确保贵站已经添加本站。
         - required: false
           label: 看我心情。
