@@ -24,7 +24,7 @@ body:
               友链地址：https://blog.devnest.top/links/
               订阅地址：https://blog.devnest.top/feed.xml
          ```
-         ![友链填写示例](https://raw.githubusercontent.com/HxCodeWarrior/Blog_FriendsBlog_Friends/refs/heads/main/.github/ISSUE_TEMPLATE/1.webp)
+         ![友链填写示例](https://github.com/HxCodeWarrior/Blog_Friends/blob/master/.github/ISSUE_TEMPLATE/1.webp)
   - type: checkboxes
     id: checks
     attributes:
