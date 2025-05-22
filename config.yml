@@ -1,0 +1,11 @@
+# 网络请求设置
+request:
+  timeout: 10 # 超时设置
+  ssl: false # ssl设置
+
+# 要抓取的 issues 配置
+issues:
+  repo: HxCodeWarrior/Blog_Friends # 仓库持有者/仓库名
+  label:
+  groups: ['active','checklist','suspend','404','玄阁','玄友','玄族','玄主']
+  sort:
