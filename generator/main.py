@@ -1,4 +1,6 @@
 # generator/main.py
+# author:  ByteWyrm
+# date: 2025.5.25 1:20
 from config.settings import load
 from generator.request import get_json, get_data
 from bs4 import BeautifulSoup

@@ -1,11 +1,14 @@
+# generator/requests.py
+# author:  ByteWyrm
+# date: 2025.5.25 1:20
 import requests
-import config
+from config.settings import load
 
 requests.packages.urllib3.disable_warnings()
 
 
 def get_data(link):
-    cfg = config.load()
+    cfg = load()
     result = ''
     user_agent = 'Mozilla/5.0 (Macintosh;Intel Mac OS X 10_12_6) ' \
                 'AppleWebKit/537.36(KHTML, like Gecko) ' \
@@ -27,7 +30,7 @@ def get_data(link):
     return result
 
 def get_json(link, params=None):
-    cfg = config.load()
+    cfg = load()
     header = {
         'Accept': 'application/vnd.github.v3+json'
     }

@@ -18,6 +18,12 @@ jobs:
     - name: Install requirements #安装requests
       run: |
         pip install -r requirements.txt
+    - name: Install Project
+      run: |
+        # 将项目根目录永久添加到 PYTHONPATH
+        echo "PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE" >> $GITHUB_ENV
+        # 以可编辑模式安装当前项目（识别为Python包）
+        pip install -e .
     - name: Update links #更新
       run: |
         python generator/main.py
