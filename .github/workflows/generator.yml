@@ -32,27 +32,34 @@ jobs:
         email: ${{ secrets.GITHUBEMAIL }}
     - name: Checkout CDN repository
       run: |
-          git clone https://${{ secrets.GITHUBUSERNAME }}:${{ secrets.PAT }}@github.com/HxCodeWarrior/CDN.git
-          cd CDN
-          
-          # 确保没有未加入分支的内容
-          git fetch origin
-
-          # 检查 links 目录是否存在
-          if [ -d "links" ]; then
-            echo "Links directory exists. Removing it."
-            git rm -r links/  # 删除整个 links 目录
-            
-            # 提交删除更改
-            git commit -m "Delete links directory"
-          else
-            echo "Links directory does not exist."
-          fi
-          # 配置用户信息
-          git config --global user.name "${{ secrets.GITHUBUSERNAME }}"
-          git config --global user.email "${{ secrets.GITHUBEMAIL }}"
-          git commit -m "Delete links directory"
+        git clone https://${{ secrets.GITHUBUSERNAME }}:${{ secrets.PAT }}@github.com/HxCodeWarrior/CDN.git
+        cd CDN
+    
+        # 初始化空仓库（如果无提交历史）
+        if [ -z "$(git rev-list -n 1 --all 2>/dev/null)" ]; then
+          echo "Initializing empty repository..."
+          git checkout -b main
+          touch .gitkeep  # 创建一个空文件
+          git add .gitkeep
+          git commit -m "Initial commit"
           git push origin main
+        fi
+    
+        git fetch origin
+    
+        # 检查 links 目录是否存在
+        if [ -d "links" ]; then
+          echo "Links directory exists. Removing it."
+          git rm -r links/
+          git commit -m "Delete links directory"
+        else
+          echo "Links directory does not exist."
+        fi
+    
+        # 配置用户信息
+        git config --global user.name "${{ secrets.GITHUBUSERNAME }}"
+        git config --global user.email "${{ secrets.GITHUBEMAIL }}"
+        git push origin main
     - name: 延迟30s执行
       run: |
           echo "Starting delay..."
