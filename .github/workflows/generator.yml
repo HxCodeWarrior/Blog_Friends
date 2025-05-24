@@ -40,7 +40,11 @@ jobs:
       run: |
         git clone https://${{ secrets.GITHUBUSERNAME }}:${{ secrets.PAT }}@github.com/HxCodeWarrior/CDN.git
         cd CDN
-    
+        
+        # 配置用户信息
+        git config --global user.name "${{ secrets.GITHUBUSERNAME }}"
+        git config --global user.email "${{ secrets.GITHUBEMAIL }}"
+
         # 初始化空仓库（如果无提交历史）
         if [ -z "$(git rev-list -n 1 --all 2>/dev/null)" ]; then
           echo "Initializing empty repository..."
@@ -62,9 +66,7 @@ jobs:
           echo "Links directory does not exist."
         fi
     
-        # 配置用户信息
-        git config --global user.name "${{ secrets.GITHUBUSERNAME }}"
-        git config --global user.email "${{ secrets.GITHUBEMAIL }}"
+       
         git push origin main
     - name: 延迟30s执行
       run: |
