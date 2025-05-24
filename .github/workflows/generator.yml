@@ -26,7 +26,7 @@ jobs:
         pip install -e .
     - name: Update links #更新
       run: |
-        python generator/main.py
+        python -m generator/main.py
     - name: Commit & Push
       uses: action-x/commit@v2.9
       with:
