@@ -92,11 +92,11 @@ jobs:
         # 提交更改
         git add .
         if [ -n "$(git status --porcelain)" ]; then
-        git commit -m "友链更新"
-        git push origin main
-      else
-        echo "No changes to commit."
-      fi
+          git commit -m "友链更新"
+          git push origin main
+        else
+          echo "No changes to commit."
+        fi
     - name: 发送请求至本仓库的另外一工作流
       uses: peter-evans/repository-dispatch@v3
       with:
