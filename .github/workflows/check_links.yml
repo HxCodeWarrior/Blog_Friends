@@ -1,0 +1,91 @@
+name: Check Links and Generate JSON
+
+on:
+  schedule:
+    - cron: '0 1 * * *'
+    - cron: '0 13 * * *'
+  workflow_dispatch:
+
+env:
+  TZ: Asia/Shanghai
+
+jobs:
+  check_links:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Pull latest repository
+      uses: actions/checkout@v4
+
+    - name: Cache pip packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Download result.json artifact
+      uses: dawidd6/action-download-artifact@v6
+      with:
+        github_token: ${{secrets.GITHUB_TOKEN}}
+        branch: main
+        name: 'result_json'
+        path: './'
+        if_no_artifact_found: warn
+
+    - name: Run Python script to check frined-links
+      env:
+        PROXY_URL: ${{ secrets.PROXY_URL }}
+        SOURCE_URL: ${{ secrets.SOURCE_URL }}
+      run: |
+        echo "Using config from config.yml"
+        cd check-flink
+        python main.py
+
+    - name: Upload result.json as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: 'result_json'
+        path: './result.json'
+        retention-days: 10
+
+    - name: Configure git
+      run: |
+        git config --global user.email "actions@github.com"
+        git config --global user.name "GitHub Actions"
+
+    - name: Commit and push
+      run: |
+        cp ./result.json static/
+        cd static
+        git init
+        git add .
+        git commit -m "⏱️GitHub Action每日定时更新"
+        git push --force https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:page
+    
+    - name: Delete Workflow Runs
+      uses: Mattraks/delete-workflow-runs@v2
+      with:
+        retain_days: 30
+        keep_minimum_runs: 6
+
+  keepalive-workflow:
+    name: Keepalive Workflow
+    if: ${{ always() }}
+    needs: check_links
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - uses: liskin/gh-workflow-keepalive@v1

@@ -21,7 +21,7 @@ jobs:
       - name: 触发更新
         uses: peter-evans/repository-dispatch@v3
         with:
-          token: ${{ secrets.MY_SECRET_TOKEN }}  # 必须使用账号B的PAT
-          repository: HxCodeWarrior/Blog_Freinds # 格式：owner/repo
-          event-type: linkspush                  # 与目标仓库的事件类型严格匹配
-          client-payload: '{"branch": "output"}' # 简化参数，移除冗余字段
+          token: ${{ secrets.MY_SECRET_TOKEN }}             # 必须使用账号B的PAT
+          repository: HxCodeWarrior/hxcodewarrior.github.io # 格式：owner/repo
+          event-type: linkspush                             # 与目标仓库的事件类型严格匹配
+          client-payload: '{"branch": "output"}'            # 简化参数，移除冗余字段

@@ -32,7 +32,7 @@ jobs:
         email: ${{ secrets.GITHUBEMAIL }}
     - name: Checkout CDN repository
       run: |
-          git clone https://${{ secrets.GITHUBUSERNAME }}:${{ secrets.PAT }}@github.com/${{ secrets.GITHUBUSERNAME }}/CDN.git
+          git clone https://${{ secrets.GITHUBUSERNAME }}:${{ secrets.PAT }}@github.com/HxCodeWarrior/CDN.git
           cd CDN
           
           # 确保没有未加入分支的内容
@@ -74,7 +74,7 @@ jobs:
           git config --global user.name "${{ secrets.GITHUBUSERNAME }}"
           git config --global user.email "${{ secrets.GITHUBEMAIL }}"
           
-          git remote add origin https://${{ secrets.GITHUBUSERNAME }}:${{ secrets.PAT }}@github.com/${{ secrets.GITHUBUSERNAME }}/CDN.git
+          git clone https://${{ secrets.GITHUBUSERNAME }}:${{ secrets.PAT }}@github.com/HxCodeWarrior/CDN.git
           
           # 更新本地分支以确保所有更改都已拉取
           git fetch origin
