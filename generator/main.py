@@ -1,8 +1,9 @@
+# generator/main.py
+from config.settings import load
+from generator.request import get_json, get_data
 from bs4 import BeautifulSoup
 import os
-import request
 import json
-import config
 
 version = 'v2'
 outputdir = os.path.join(version, 'links')  # 输出文件结构变化时，更新输出路径版本
@@ -32,7 +33,7 @@ def getData(repo, parameter, sort, data_pool, json_pool):
             if sort:
                 params['sort'] = sort
             
-            issues = request.get_json(url, params)
+            issues = get_json(url, params)
 
             if not issues:
                 print('> end')
@@ -40,7 +41,7 @@ def getData(repo, parameter, sort, data_pool, json_pool):
 
             for issue in issues:
                 issueslink = issue['html_url']
-                issues_page = request.get_data(issueslink)
+                issues_page = get_data(issueslink)
                 issues_soup = BeautifulSoup(issues_page, 'html.parser')
                 try:
                     issues_linklist = issues_soup.find_all('pre')
@@ -58,7 +59,7 @@ def getData(repo, parameter, sort, data_pool, json_pool):
 def github_issuse(json_pool):
     print('\n')
     print('------- github issues start ----------')
-    cfg = config.load()
+    cfg = load()
     filter = cfg['issues']
 
     if not filter["groups"]:

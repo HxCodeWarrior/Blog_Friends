@@ -5,7 +5,7 @@ import time
 import logging
 import requests
 import warnings
-import config
+from config.settings import load
 from queue import Queue
 from datetime import datetime
 from urllib.parse import urlparse
@@ -21,7 +21,7 @@ logging.basicConfig(
 warnings.filterwarnings("ignore", message="Unverified HTTPS request is being made.*")
 
 # 加载配置
-cfg = config.load()
+cfg = load()
 check_links_config = cfg.get('check_links', {})
 
 # 请求头统一配置
