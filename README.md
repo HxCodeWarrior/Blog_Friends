@@ -20,4 +20,4 @@
 按照 [Issue模板](https://github.com/HxCodeWarrior/Friend-Circle-Lite/issues/new/choose) 内容填写并提交，下次博客更新会通过邮箱推送。
 
 ## 友链添加逻辑
-![友链添加逻辑](https://raw.githubusercontent.com/HxCodeWarrior/Blog_Friends/refs/heads/master/images/mindmap.png)
+![友链添加逻辑](https://github.com/HxCodeWarrior/Blog_Friends/blob/main/images/mind_map.png)
