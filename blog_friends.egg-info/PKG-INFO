@@ -1,0 +1,10 @@
+Metadata-Version: 2.4
+Name: blog_friends
+Version: 0.1
+License-File: LICENSE
+Requires-Dist: requests
+Requires-Dist: beautifulsoup4
+Requires-Dist: pyyaml
+Requires-Dist: pygithub
+Dynamic: license-file
+Dynamic: requires-dist
