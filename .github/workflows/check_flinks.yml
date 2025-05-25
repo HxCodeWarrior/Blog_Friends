@@ -1,0 +1,33 @@
+name: 友链状态检测
+
+on:
+  issues:
+    types: [opened, edited]
+
+jobs:
+  link-check:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+          
+      - name: Install requirements #安装requests
+        run: |
+          pip install -r requirements.txt
+          
+      - name: Check links
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: python -m check_flinks.main

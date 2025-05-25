@@ -22,7 +22,7 @@ body:
               博客头像：https://blog.devnest.top/img/avatar.jpg
               博客描述：专注于网络安全，致力于网络安全技术的研究和分享。
               友链地址：https://blog.devnest.top/links/
-              订阅地址：https://blog.devnest.top/feed.xml
+              订阅地址：https://blog.devnest.top/atom.xml
          ```
          ![友链填写示例](https://raw.githubusercontent.com/HxCodeWarrior/Blog_Friends/refs/heads/master/.github/ISSUE_TEMPLATE/1.webp)
   - type: checkboxes
