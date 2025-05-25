@@ -257,11 +257,14 @@ def manage_labels(issue_number, is_success):
     try:
         g = Github(os.getenv("GITHUB_TOKEN"))
         repo = g.get_repo(os.getenv("GITHUB_REPOSITORY"))
-        issue = repo.get_issue(issue_number)  # 可能抛出异常
+        issue = repo.get_issue(issue_number)
         
-        # 清理旧标签
+        # 获取当前所有标签名称
+        current_labels = [label.name for label in issue.labels]
+        
+        # 清理旧标签（仅删除存在的标签）
         for label in ["active", "needs-fix"]:
-            if label in [l.name for l in issue.labels]:
+            if label in current_labels:
                 issue.remove_from_labels(label)
         
         # 添加新标签
@@ -271,7 +274,7 @@ def manage_labels(issue_number, is_success):
         if e.status == 410:
             print(f"⚠️ Issue #{issue_number} 已被删除，跳过标签操作。")
         else:
-            raise  # 其他异常继续抛出
+            raise
 
 if __name__ == "__main__":
     # 从环境变量获取 Issue 数据
