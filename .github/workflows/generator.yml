@@ -8,9 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # 权限声明
-    permissions:
-      issues: write  # 允许操作 Issue 标签
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -27,23 +24,6 @@ jobs:
         echo "PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE" >> $GITHUB_ENV
         # 以可编辑模式安装当前项目（识别为Python包）
         pip install -e .
-    - name: Extract Issue Data
-      id: extract-issue
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const issueBody = context.payload.issue.body;
-          const issueNumber = context.payload.issue.number;
-          core.exportVariable('ISSUE_BODY', issueBody);
-          core.exportVariable('ISSUE_NUMBER', issueNumber);
-    - name: Run Link Check
-      env:
-        GITHUB_TOKEN: ${{ secrets.PAT }}
-        GITHUB_REPOSITORY: ${{ github.repository }}
-        ISSUE_BODY: ${{ env.ISSUE_BODY }}  # 显式传递 ISSUE_BODY
-        ISSUE_NUMBER: ${{ env.ISSUE_NUMBER }} # 显式传递 ISSUE_NUMBER
-      run: |
-        python -m check_flinks.main
     - name: Update links #更新
       run: |
         python -m generator.main
