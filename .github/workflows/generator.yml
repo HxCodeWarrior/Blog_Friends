@@ -1,0 +1,125 @@
+name: Generator
+
+on:
+  issues:
+  watch:
+    types: [started]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.x
+    - name: Install requirements #安装requests
+      run: |
+        pip install -r requirements.txt
+    - name: Install Project
+      run: |
+        # 将项目根目录永久添加到 PYTHONPATH
+        echo "PYTHONPATH=$PYTHONPATH:$GITHUB_WORKSPACE" >> $GITHUB_ENV
+        # 以可编辑模式安装当前项目（识别为Python包）
+        pip install -e .
+    - name: Extract Issue Data
+      id: extract-issue
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const issueBody = context.payload.issue.body;
+          const issueNumber = context.payload.issue.number;
+          core.exportVariable('ISSUE_BODY', issueBody);
+          core.exportVariable('ISSUE_NUMBER', issueNumber);
+    - name: Run Link Check
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        ISSUE_BODY: ${{ env.ISSUE_BODY }}  # 显式传递 ISSUE_BODY
+        ISSUE_NUMBER: ${{ env.ISSUE_NUMBER }} # 显式传递 ISSUE_NUMBER
+      run: |
+        python -m check_flinks.main
+    - name: Update links #更新
+      run: |
+        python -m generator.main
+    - name: Commit & Push
+      uses: action-x/commit@v2.9
+      with:
+        github-token: ${{ secrets.PAT }}
+        push-branch: 'output'
+        force-push: 'true'
+        commit-message: 'Generate Json'
+        name: ${{ secrets.GITHUBUSERNAME }}
+        email: ${{ secrets.GITHUBEMAIL }}
+        rebase: 'true'
+        clean: 'true' # 拉取前清理未跟踪的文件
+    - name: Checkout CDN repository
+      run: |
+        git clone https://${{ secrets.GITHUBUSERNAME }}:${{ secrets.PAT }}@github.com/HxCodeWarrior/CDN.git
+        cd CDN
+        
+        # 配置用户信息
+        git config --global user.name "${{ secrets.GITHUBUSERNAME }}"
+        git config --global user.email "${{ secrets.GITHUBEMAIL }}"
+
+        # 初始化空仓库（如果无提交历史）
+        if [ -z "$(git rev-list -n 1 --all 2>/dev/null)" ]; then
+          echo "Initializing empty repository..."
+          git checkout -b main
+          touch .gitkeep  # 创建一个空文件
+          git add .gitkeep
+          git commit -m "Initial commit"
+          git push origin main
+        fi
+    
+        git fetch origin
+    
+        # 检查 links 目录是否存在
+        if [ -d "links" ]; then
+          echo "Links directory exists. Removing it."
+          git rm -r links/
+          git commit -m "Delete links directory"
+        else
+          echo "Links directory does not exist."
+        fi
+    
+       
+        git push origin main
+    - name: 延迟30s执行
+      run: |
+          echo "Starting delay..."
+          sleep 30  # 延迟 30 秒
+          echo "Delay completed."
+    - name: Push changes to CDN repository
+      run: |
+        # 进入 CDN 仓库目录（已在 Checkout CDN repository 步骤中克隆）
+        cd CDN
+
+        # 配置用户信息（确保提交权限）
+        git config --global user.name "${{ secrets.GITHUBUSERNAME }}"
+        git config --global user.email "${{ secrets.GITHUBEMAIL }}"
+
+        # 拉取最新代码避免冲突
+        git pull origin main
+
+        # 将生成的友链文件从 v2/links 复制到 CDN/links
+        mkdir -p links  # 确保目录存在
+        cp -r ../v2/links/* ./links/
+
+        # 提交更改
+        git add .
+        if [ -n "$(git status --porcelain)" ]; then
+          git commit -m "友链更新"
+          git push origin main
+        else
+          echo "No changes to commit."
+        fi
+    - name: 发送请求至本仓库的另外一工作流
+      uses: peter-evans/repository-dispatch@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}  # 使用默认的 GITHUB_TOKEN
+        repository: ${{ github.repository }}  # 指向当前仓库
+        event-type: linkschange
+        client-payload: '{"branch": "output"}'

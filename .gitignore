@@ -1,0 +1,15 @@
+.DS_Store
+
+.env
+
+.csv
+
+*.json
+
+*/__pycache__
+
+# Python 包安装生成的文件
+*.egg-info/
+*.egg
+
+/v2/

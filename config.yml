@@ -1,0 +1,20 @@
+# 网络请求设置
+request:
+  timeout: 10 # 超时设置
+  ssl: false # ssl设置
+
+# 要抓取的 issues 配置
+issues:
+  repo: HxCodeWarrior/Blog_Friends # 仓库持有者/仓库名
+  label:
+  groups: ['active','checklist','suspend','404', '玄阁', '玄友', '玄族', '玄主']
+  sort:
+
+# 友链状态检测配置
+check_links:
+  source: https://blog.devnest.top/friends.json # 友链数据源
+  proxy: # 代理URL，可选
+  result_file: ./result.json # 结果文件路径
+  api_check: true # 是否使用API进行二次检查
+  api_url: https://v2.xxapi.cn/api/status # API检查URL
+  max_workers: 10 # 并发检查的最大工作线程数
