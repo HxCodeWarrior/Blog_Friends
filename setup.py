@@ -11,5 +11,6 @@ setup(
         "requests",
         "beautifulsoup4",
         "pyyaml",
+        "pygithub"
     ],
 )
