@@ -7,7 +7,7 @@ request:
 issues:
   repo: HxCodeWarrior/Blog_Friends # 仓库持有者/仓库名
   label:
-  groups: ['active','checklist','suspend','404', '玄阁', '玄友', '玄族', '玄主']
+  groups: ['active','checklist','suspend','needs-fix', '玄阁', '玄友', '玄族', '玄主']
   sort:
 
 # 友链状态检测配置
