@@ -56,8 +56,6 @@ jobs:
         commit-message: 'Generate Json'
         name: ${{ secrets.GITHUBUSERNAME }}
         email: ${{ secrets.GITHUBEMAIL }}
-        rebase: 'true'
-        clean: 'true' # 拉取前清理未跟踪的文件
     - name: Checkout CDN repository
       run: |
         git clone https://${{ secrets.GITHUBUSERNAME }}:${{ secrets.PAT }}@github.com/HxCodeWarrior/CDN.git
